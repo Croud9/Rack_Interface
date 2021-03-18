@@ -1,5 +1,5 @@
 class TimeFormat
-  attr_reader :time_formatted
+  attr_reader :invalid_formats
 
   AVAILABLE_FORMATS = {
     year:   '%Y',
@@ -10,29 +10,23 @@ class TimeFormat
     second: '%S'
   }
 
-  def call(params)
+  def initialize(params)
     @time_formatted = []
     @invalid_formats = []
-    formats = params.split(",")
-
-    time_check(formats)
-    return wrong_format unless @invalid_formats.empty?
+    @formats = params['format'].split(",")
   end
 
-  def time_check(formats)
-    time = []
-    formats.each do |format|
-      AVAILABLE_FORMATS.has_key?(format) ? time << Time.now.strftime(AVAILABLE_FORMATS[format]) : @invalid_formats << format
+  def time_call
+    @formats.each do |format|
+      AVAILABLE_FORMATS[format] ? @time_formatted << AVAILABLE_FORMATS[format] : @invalid_formats << format
     end
-    @time_formatted = time.join("-")
   end
 
-  def wrong_format
-    @wrong_format = true
-    @time_formatted = "Unknown time format: #{@invalid_formats}\n"
+  def time
+    Time.now.strftime(@time_formatted.join('-'))
   end
 
-  def wrong_format?
-    @wrong_format
+  def success?
+    @time_formatted.empty?
   end
 end

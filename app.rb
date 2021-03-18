@@ -10,15 +10,15 @@ class App
   private
 
   def time_format
-      return not_found unless @request.get? && @request.path == '/time'
-      format = TimeFormat.new(@request.params)
-      format.time_call
+    return not_found unless @request.get? && @request.path == '/time'
+    format = TimeFormat.new(@request.params)
+    format.time_call
 
-      if format.success?
-        result(format)
-      else
-        unknown_format(format)
-      end
+    if format.success?
+      result(format)
+    else
+      unknown_format(format)
+    end
   end
 
   def result(format)
